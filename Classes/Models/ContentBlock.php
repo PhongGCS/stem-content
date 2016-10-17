@@ -20,6 +20,12 @@ class ContentBlock {
 	protected $template = null;
 
 	/**
+	 * User supplied container CSS class
+	 * @var string|null
+	 */
+	protected $containerCSS = null;
+
+	/**
 	 * Context
 	 * @var Context|null
 	 */
@@ -60,6 +66,8 @@ class ContentBlock {
 		$this->page = $page;
 		$this->post = $post;
 		$this->context = $context;
+
+		$this->containerCSS = arrayPath($data, 'container_css', null);
 	}
 
 	/**
@@ -91,5 +99,13 @@ class ContentBlock {
 			$data=array_merge($data, $otherData);
 
 		return $this->context->ui->render($this->template, $data);
+	}
+
+	/**
+	 * Container CSS class specified by the end user for this content block
+	 * @return null|string
+	 */
+	public function containerCSS() {
+		return $this->containerCSS;
 	}
 }

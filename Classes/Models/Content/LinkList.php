@@ -17,7 +17,6 @@ use ILab\Stem\Models\Post;
  */
 class LinkList extends ContentBlock {
 	protected $links = [];
-	protected $containerCSS = null;
 
 	public function __construct(Context $context, $data = null, Post $post = null, Page $page = null, $template = null) {
 		if (!$template)
@@ -28,15 +27,9 @@ class LinkList extends ContentBlock {
 		$links = arrayPath($data, 'links', []);
 		foreach($links as $link)
 			$this->links[] = new Link($context, $link);
-
-		$this->containerCSS = arrayPath($data, 'container_css', null);
 	}
 
 	public function links() {
 		return $this->links;
-	}
-
-	public function containerCSS() {
-		return $this->containerCSS;
 	}
 }

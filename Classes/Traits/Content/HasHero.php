@@ -31,7 +31,8 @@ trait HasHero {
 			'hero_background_image' => get_field('hero_background_image', $page->id),
 			'hero_image' => get_field('hero_image', $page->id),
 			'hero_title' => get_field('hero_title', $page->id),
-			'hero_text' => get_field('hero_text', $page->id)
+			'hero_text' => get_field('hero_text', $page->id),
+		    'container_css' => get_field('hero_container_css', $page->id)
 		];
 
 		$this->hero = new PageHero($context, $heroData, null, $page);

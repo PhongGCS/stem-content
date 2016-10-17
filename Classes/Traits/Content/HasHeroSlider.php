@@ -29,8 +29,9 @@ trait HasHeroSlider {
 	 */
 	public function buildHero(Context $context, Page $page) {
 		$heroes = get_field('heroes', $page->id, []);
+		$css = get_field('hero_container_css', $page->id);
 
-		$this->heroSlider = new PageHeroSlider($context, ['heroes' => $heroes], null, $page);
+		$this->heroSlider = new PageHeroSlider($context, ['heroes' => $heroes, 'container_css' => $css], null, $page);
 	}
 
 	/**

@@ -17,7 +17,6 @@ use ILab\Stem\Models\Post;
  */
 class Text extends ContentBlock {
 	protected $text = null;
-	protected $containerCSS = null;
 
 	public function __construct(Context $context, $data = null, Post $post = null, Page $page = null, $template = null) {
 		if (!$template)
@@ -26,14 +25,9 @@ class Text extends ContentBlock {
 		parent::__construct($context, $data, $post, $page, $template);
 
 		$this->text = arrayPath($data, 'text', null);
-		$this->containerCSS = arrayPath($data, 'container_css', null);
 	}
 
 	public function text() {
 		return $this->text;
-	}
-
-	public function containerCSS() {
-		return $this->containerCSS;
 	}
 }
