@@ -1,0 +1,21 @@
+{
+  "name": "ilab/stem-content",
+  "description": "Plugin for Stem that extends with a basic framework for content blocks in WordPress.",
+  "type": "wordpress-plugin",
+  "license": "LGPL",
+  "keywords": ["stem","content"],
+  "authors": [
+    {
+      "name": "Jon Gilkison",
+      "email": "jon@interfacelab.com"
+    }
+  ],
+  "require": {
+  },
+  "require-dev": {},
+  "autoload": {
+    "psr-4": {
+      "ILab\\StemContent\\": "Classes"
+    }
+  }
+}
