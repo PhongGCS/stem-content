@@ -67,7 +67,9 @@ class ContentBlock {
 		$this->post = $post;
 		$this->context = $context;
 
-		$this->containerCSS = arrayPath($data, 'container_css', null);
+		$cssClasses = arrayPath($data, 'container_css', null);
+		if ($cssClasses && is_array($cssClasses))
+			$this->containerCSS = implode(' ', $cssClasses);
 	}
 
 	/**
