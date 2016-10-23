@@ -3,6 +3,7 @@
 namespace ILab\StemContent\ACF;
 
 use ILab\Stem\Core\Context;
+use ILab\Stem\Core\Log;
 
 class CSSClassesField extends \acf_field  {
 	function __construct() {
@@ -40,11 +41,14 @@ class CSSClassesField extends \acf_field  {
 			'type'          => 'select',
 			'name'          => 'content_type',
 			'layout'        => 'horizontal',
+			'multiple'      => 1,
 			'choices'       => $choices
 		));
 	}
 
-
+	function update_field($value, $post_id, $field) {
+		return explode(',',$value);
+	}
 
 	/**
 	 *  render_field()
@@ -64,22 +68,43 @@ class CSSClassesField extends \acf_field  {
 		$content_type=arrayPath($field, 'content_type', null);
 
 		$styles = [];
-		if ($content_type)
+		if ($content_type) {
+			$allStyles = Context::current()->ui->setting("content/styles/*", []);
 			$styles = Context::current()->ui->setting("content/styles/{$content_type}", []);
 
+			$styles = array_merge($styles, $allStyles);
+		}
+
+		$stylesJSON = [];
+		foreach($styles as $key => $style) {
+			$styleObj = new \stdClass();
+			$styleObj->id = $key;
+			$styleObj->text = $style;
+
+			$stylesJSON[] = $styleObj;
+		}
+
 		$val=$field['value'];
+		if (!is_array($val))
+			$val = [$val];
+		Log::info('values',[$val]);
+
 		$suid = 's'.uniqid();
 		?>
-		<select id="<?php echo $suid; ?>" name="<?php echo esc_attr($field['name']) ?>">
-			<option data-icon="none">None</option>
-			<?php foreach($styles as $id => $name): ?>
-				<option value="<?php echo $id?>" data-icon="<?php echo $id?>" <?php echo (($id==$val) ? 'SELECTED' : '') ?>><?php echo $name?></option>
-			<?php endforeach; ?>
-		</select>
+		<input type="hidden" name="<?php echo esc_attr($field['name']) ?>[]" id="<?php echo $suid?>_fag" value="<?php echo implode(',',$val) ?>">
 		<script>
-			jQuery('#<?php echo $suid;?>').select2({
-				width: "100%"
-			});
+			(function($){
+				var $sel = $('#<?php echo $suid;?>_fag');
+				$sel.select2({
+					tags: <?php echo json_encode($stylesJSON, JSON_PRETTY_PRINT)?>,
+					width: "100%"
+				});
+				$sel.select2("container").find("ul.select2-choices").sortable({
+					containment: 'parent',
+					start: function() { $sel.select2("onSortStart"); },
+					update: function() { $sel.select2("onSortEnd"); }
+				});
+			})(jQuery);
 		</script>
 		<?php
 	}
