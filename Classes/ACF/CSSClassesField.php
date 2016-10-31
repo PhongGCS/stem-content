@@ -41,12 +41,15 @@ class CSSClassesField extends \acf_field  {
 			'type'          => 'select',
 			'name'          => 'content_type',
 			'layout'        => 'horizontal',
-			'multiple'      => 1,
+			'multiple'      => 0,
 			'choices'       => $choices
 		));
 	}
 
-	function update_field($value, $post_id, $field) {
+	function update_value($value, $post_id, $field) {
+		if (is_array($value))
+			$value = $value[0];
+
 		return explode(',',$value);
 	}
 
