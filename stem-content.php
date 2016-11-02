@@ -21,6 +21,8 @@ register_activation_hook( __FILE__, function(){
 });
 
 add_action('acf/include_field_types', function( $version ) {
-	new \ILab\StemContent\ACF\FontAwesomeField();
-	new \ILab\StemContent\ACF\CSSClassesField();
+	if (!defined('WP_CLI')) {
+		new \ILab\StemContent\ACF\FontAwesomeField();
+		new \ILab\StemContent\ACF\CSSClassesField();
+	}
 });
