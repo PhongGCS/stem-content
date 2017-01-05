@@ -15,7 +15,7 @@
   "require-dev": {},
   "autoload": {
     "psr-4": {
-      "ILab\\StemContent\\": "Classes"
+      "ILab\\StemContent\\": "classes"
     }
   }
 }

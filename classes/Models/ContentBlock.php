@@ -62,7 +62,14 @@ class ContentBlock {
 	 * @param null $template
 	 */
 	public function __construct(Context $context, $data = null, Post $post = null, Page $page = null, $template = null) {
-		$this->template = $template;
+		$userTemplate = arrayPath($data, 'template', null);
+
+		if ($userTemplate) {
+			$this->template = $userTemplate;
+		} else {
+			$this->template = $template;
+		}
+
 		$this->page = $page;
 		$this->post = $post;
 		$this->context = $context;

@@ -16,7 +16,7 @@ class ComposerStaticInit7df9dc2e0c2cdb0ef4899deea254e440
     public static $prefixDirsPsr4 = array (
         'ILab\\StemContent\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Classes',
+            0 => __DIR__ . '/../..' . '/classes',
         ),
     );
 

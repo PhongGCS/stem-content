@@ -2,6 +2,7 @@
 namespace ILab\StemContent\Models;
 
 use ILab\Stem\Core\Context;
+use ILab\Stem\Core\Log;
 use ILab\Stem\Models\Page;
 use ILab\Stem\Models\Post;
 
@@ -45,6 +46,8 @@ class ContentBlockContainer {
 				$contentTypeClass = $context->ui->setting("content/map/{$contentType}");
 				if (class_exists($contentTypeClass)) {
 					$this->content[] = new $contentTypeClass($context, $contentObj, $post, $page);
+				} else {
+					Log::warning("$contentTypeClass does not exist for $contentType");
 				}
 			}
 		}

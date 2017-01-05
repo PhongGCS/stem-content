@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ILab\\StemContent\\' => array($baseDir . '/Classes'),
+    'ILab\\StemContent\\' => array($baseDir . '/classes'),
 );

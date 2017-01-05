@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "code.block.min.js": {
+      "files": [
+        "js/prism.min.js",
+        "js/code.block.js"
+      ]
+    },
+    "code.block.min.css": {
+      "files": [
+        "css/code.block.scss"
+      ]
+    },
+    "images": {
+      "files": ["img/**/*"]
+    },
+    "fonts": {
+      "files": ["fonts/*"]
+    }
+  },
+  "paths": {
+    "source": "",
+    "dist": "../public/",
+    "bowerDir": "bower_components"
+  },
+  "config": {
+    "devUrl": "http://dev.stem.press"
+  }
+}

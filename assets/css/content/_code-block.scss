@@ -1,0 +1,11 @@
+.content-code-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3.8rem 0;
+
+  pre {
+    width: 66vw;
+    max-width: 960px;
+  }
+}
