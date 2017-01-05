@@ -33,3 +33,9 @@ add_filter('stem/additional_view_paths', function($paths) {
 
 	return $paths;
 });
+
+
+add_filter('acf/settings/load_json', function($paths) {
+	$paths[] = ILAB_STEM_CONTENT_DIR.'/data/fields';
+	return $paths;
+});

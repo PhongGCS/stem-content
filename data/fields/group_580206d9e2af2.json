@@ -1,0 +1,145 @@
+{
+    "key": "group_580206d9e2af2",
+    "title": "Page Hero Content Type",
+    "fields": [
+        {
+            "key": "field_58042ac9d9259",
+            "label": "Container CSS",
+            "name": "hero_container_css",
+            "type": "css_classes",
+            "instructions": "The CSS class for the content container.  Optional.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "content_type": "hero"
+        },
+        {
+            "key": "field_580206e9ef458",
+            "label": "Background Image",
+            "name": "hero_background_image",
+            "type": "image",
+            "instructions": "The background image for the hero.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_58020709ef459",
+            "label": "Image",
+            "name": "hero_image",
+            "type": "image",
+            "instructions": "Main image for the hero, optional.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_5802072cef45a",
+            "label": "Title",
+            "name": "hero_title",
+            "type": "textarea",
+            "instructions": "Title for the hero, optional.  You can insert line breaks by adding a return where you want the break to occur.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "Hero title",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "br"
+        },
+        {
+            "key": "field_5802075eef45b",
+            "label": "Text",
+            "name": "hero_text",
+            "type": "wysiwyg",
+            "instructions": "Any text that should appear beneath the hero title.  Optional.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1
+        },
+        {
+            "key": "field_58020e14e17de",
+            "label": "Link",
+            "name": "hero",
+            "type": "clone",
+            "instructions": "The hero link, optional.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_580207f29706a"
+            ],
+            "display": "seamless",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "left",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "Content type for a page hero.",
+    "modified": 1476669037
+}

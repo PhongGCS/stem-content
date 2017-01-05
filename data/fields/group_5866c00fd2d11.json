@@ -1,0 +1,168 @@
+{
+    "key": "group_5866c00fd2d11",
+    "title": "Code Block Content Type",
+    "fields": [
+        {
+            "key": "field_5866c5e408f5f",
+            "label": "Container CSS",
+            "name": "container_css",
+            "type": "css_classes",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "content_type": "code_block"
+        },
+        {
+            "key": "field_5866c5f608f60",
+            "label": "Template",
+            "name": "template",
+            "type": "content_template",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "content_type": "code_block"
+        },
+        {
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "php": "PHP",
+                "css": "CSS",
+                "javascript": "Javascript",
+                "html": "HTML",
+                "bash": "BASH Shell"
+            },
+            "default_value": [
+                "php"
+            ],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value",
+            "key": "field_5866c60608f61",
+            "label": "Language",
+            "name": "language",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "default_value": 0,
+            "message": "",
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "key": "field_5866c64808f62",
+            "label": "Display Shell",
+            "name": "display_shell",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "key": "field_5866c82808f63",
+            "label": "Shell Prompt",
+            "name": "shell_prompt",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5866c64808f62",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "default_value": 0,
+            "message": "",
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "key": "field_5866c85d08f64",
+            "label": "Show Line Numbers",
+            "name": "show_line_numbers",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": 12,
+            "key": "field_5866c86c08f65",
+            "label": "Code",
+            "name": "code",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1483131156
+}

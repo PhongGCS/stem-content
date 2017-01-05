@@ -1,0 +1,73 @@
+{
+    "key": "group_5802e6c61efd6",
+    "title": "Text Content Type",
+    "fields": [
+        {
+            "key": "field_5803c85a591b3",
+            "label": "Container CSS",
+            "name": "container_css",
+            "type": "css_classes",
+            "instructions": "The CSS class for the content container.  Optional.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "content_type": "text"
+        },
+        {
+            "key": "field_586187e755473",
+            "label": "Template",
+            "name": "template",
+            "type": "content_template",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "content_type": "text"
+        },
+        {
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "default_value": "",
+            "delay": 0,
+            "key": "field_5802e7086e743",
+            "label": "Text",
+            "name": "text",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "Content type for a single chunk of text",
+    "modified": 1482788683
+}
