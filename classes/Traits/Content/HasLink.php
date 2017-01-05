@@ -107,9 +107,6 @@ trait HasLink {
 			$this->linkURL = $relativeUrl;
 		}
 
-		if (empty($this->linkURL))
-			return;
-
 		if (!empty($linkAnchor)) {
 			$this->linkURL .= '#'.$linkAnchor;
 		}

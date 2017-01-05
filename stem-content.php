@@ -20,11 +20,13 @@ register_activation_hook( __FILE__, function(){
 	}
 });
 
-add_action('acf/include_field_types', function( $version ) {
-	new \ILab\StemContent\ACF\FontAwesomeField();
-	new \ILab\StemContent\ACF\CSSClassesField();
-	new \ILab\StemContent\ACF\ContentTemplateField();
-});
+if (!defined('WP_CLI')) {
+	add_action('acf/include_field_types', function( $version ) {
+			new \ILab\StemContent\ACF\FontAwesomeField();
+			new \ILab\StemContent\ACF\CSSClassesField();
+			new \ILab\StemContent\ACF\ContentTemplateField();
+	});
+}
 
 add_filter('stem/additional_view_paths', function($paths) {
 	$paths[] = ILAB_STEM_CONTENT_DIR.'/views';
