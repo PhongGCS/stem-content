@@ -245,14 +245,11 @@ trait HasLink {
 		if ($linkText) {
 			$linkContent[] = $linkText;
 			if ($this->linkTitle) {
-				$attributes['alt'] = $this->linkTitle;
 				$attributes['title'] = $this->linkTitle;
 			}
 		} else if ($this->linkTitle && $this->linkImage) {
-			$attributes['alt'] = $this->linkTitle;
 			$linkContent[] = "<span>{$this->linkTitle}</span>";
 		} else if ($this->linkTitle) {
-			$attributes['alt'] = $this->linkTitle;
 			$linkContent[] = $this->linkTitle;
 		}
 
