@@ -205,11 +205,12 @@ trait HasLink {
 	 * @param string $imageSize
 	 * @param null|array $imageAttrs
 	 * @param bool $stripImageDimensions
+	 * @param string $linkText
 	 *
 	 * @return string The rendered tag.
 	 */
-	public function renderLinkTag($imageSize='thumbnail', $imageAttrs=null, $stripImageDimensions=false) {
-		if (!$this->linkURL || ($this->linkType == 'none') || (!$this->linkTitle && !$this->linkImage))
+	public function renderLinkTag($imageSize='thumbnail', $imageAttrs=null, $stripImageDimensions=false, $linkText = null) {
+		if (!$this->linkURL || ($this->linkType == 'none'))
 			return '';
 
 		$attributes = [
@@ -241,9 +242,17 @@ trait HasLink {
 			$linkContent[] = "<i class='fa {$this->linkIcon}'></i>";
 		}
 
-		if ($this->linkTitle && $this->linkImage) {
+		if ($linkText) {
+			$linkContent[] = $linkText;
+			if ($this->linkTitle) {
+				$attributes['alt'] = $this->linkTitle;
+				$attributes['title'] = $this->linkTitle;
+			}
+		} else if ($this->linkTitle && $this->linkImage) {
+			$attributes['alt'] = $this->linkTitle;
 			$linkContent[] = "<span>{$this->linkTitle}</span>";
 		} else if ($this->linkTitle) {
+			$attributes['alt'] = $this->linkTitle;
 			$linkContent[] = $this->linkTitle;
 		}
 
