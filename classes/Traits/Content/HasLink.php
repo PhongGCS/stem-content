@@ -21,6 +21,7 @@ trait HasLink {
 	protected $linkURL = null;
 	protected $linkTitle = null;
 	protected $linkImage = null;
+	protected $linkBackgroundImage = null;
 	protected $linkCSSClasses = null;
 	protected $linkRelationships = null;
 	protected $linkOpenInNewWindow = false;
@@ -50,6 +51,7 @@ trait HasLink {
 			"{$prefix}link_relationship" => get_field("{$prefix}link_relationship", $postId),
 			"{$prefix}link_new_window" => get_field("{$prefix}link_new_window", $postId),
 			"{$prefix}link_download_file_name" => get_field("{$prefix}link_download_file_name", $postId),
+			"{$prefix}link_background_image" => get_field("{$prefix}link_background_image", $postId),
 		];
 
 		$this->parseLinkFromData($data, $context, $prefix);
@@ -87,10 +89,17 @@ trait HasLink {
 		$this->linkTitle = arrayPath($data, "{$prefix}link_title", null);
 		$this->linkCSSClasses = arrayPath($data, "{$prefix}link_css_class", null);
 		$this->linkIcon = arrayPath($data, "{$prefix}link_icon", null);
+		if ($this->linkIcon == 'None') {
+			$this->linkIcon = null;
+		}
 
 		$linkImageID = arrayPath($data, "{$prefix}link_image", null);
 		if ($linkImageID)
 			$this->linkImage = $context->modelForPostID($linkImageID);
+
+		$linkBackgroundImageID = arrayPath($data, "{$prefix}link_background_image", null);
+		if ($linkBackgroundImageID)
+			$this->linkBackgroundImage = $context->modelForPostID($linkBackgroundImageID);
 
 		if (($this->linkType=='post') && $postLink) {
 			$this->linkObject = $context->modelForPost($postLink);
@@ -161,6 +170,14 @@ trait HasLink {
 	}
 
 	/**
+	 * The background image in the link.
+	 * @return null|Attachment
+	 */
+	public function linkBackgroundImage() {
+		return $this->linkBackgroundImage;
+	}
+
+	/**
 	 * Any additional CSS classes
 	 * @return null|string
 	 */
@@ -206,10 +223,12 @@ trait HasLink {
 	 * @param null|array $imageAttrs
 	 * @param bool $stripImageDimensions
 	 * @param string $linkText
+	 * @param string $backgroundImageSize
+	 * @param string $textWrap
 	 *
 	 * @return string The rendered tag.
 	 */
-	public function renderLinkTag($imageSize='thumbnail', $imageAttrs=null, $stripImageDimensions=false, $linkText = null) {
+	public function renderLinkTag($imageSize='thumbnail', $imageAttrs=null, $stripImageDimensions=false, $linkText = null, $backgroundImageSize=null, $textWrap = false) {
 		if (!$this->linkURL || ($this->linkType == 'none'))
 			return '';
 
@@ -234,6 +253,10 @@ trait HasLink {
 
 		$linkContent = [];
 
+		if ($this->linkBackgroundImage) {
+			$attributes['style']='background-image:url('.$this->linkBackgroundImage->src($backgroundImageSize).')';
+		}
+
 		if ($this->linkImage) {
 			$linkContent[] = $this->linkImage->img($imageSize, $imageAttrs, $stripImageDimensions);
 		}
@@ -250,7 +273,11 @@ trait HasLink {
 		} else if ($this->linkTitle && $this->linkImage) {
 			$linkContent[] = "<span>{$this->linkTitle}</span>";
 		} else if ($this->linkTitle) {
-			$linkContent[] = $this->linkTitle;
+			if (!empty($textWrap)) {
+				$linkContent[] = "<$textWrap>{$this->linkTitle}</$textWrap>";
+			} else {
+				$linkContent[] = $this->linkTitle;
+			}
 		}
 
 		$attrs = '';

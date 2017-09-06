@@ -20,8 +20,8 @@ use ILab\StemContent\Traits\Content\HasLinkInterface;
 class Link implements HasLinkInterface {
 	use HasLink;
 
-	public function __construct(Context $context, $data = null) {
-		$this->parseLinkFromData($data, $context);
+	public function __construct(Context $context, $data = null, $prefix = '') {
+		$this->parseLinkFromData($data, $context, $prefix);
 	}
 
 	public function containerCSS() {

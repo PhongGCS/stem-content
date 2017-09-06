@@ -61,6 +61,38 @@
             "maxlength": ""
         },
         {
+            "key": "field_59af2b23ca04e",
+            "label": "Link Background Image",
+            "name": "link_background_image",
+            "type": "image",
+            "instructions": "The image to use for the background of the link.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5802080a2bd04",
+                        "operator": "!=",
+                        "value": "none"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
             "key": "field_58020980f6281",
             "label": "Link Image",
             "name": "link_image",
