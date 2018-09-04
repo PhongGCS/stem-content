@@ -6,6 +6,11 @@
         "js/code.block.js"
       ]
     },
+    "jquery.tag-editor.min.js": {
+      "files": [
+        "js/jquery.tag-editor.js"
+      ]
+    },
     "code.block.min.css": {
       "files": [
         "css/code.block.scss"

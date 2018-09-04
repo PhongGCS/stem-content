@@ -11,50 +11,63 @@ class CSSClassesField extends \acf_field  {
 		$this->label = __('CSS Classes', 'stem-content');
 		$this->category = 'choice';
 		$this->defaults = [];
+		$this->stylesJSON = [];
 
 		if (Context::current()) {
 			$allStyles = Context::current()->ui->setting("content/styles/*", []);
 			$otherStyles = Context::current()->ui->setting("content/styles", []);
 
-			$allStylesJSON = [];
+			if (count($this->stylesJSON) == 0) {
+                foreach($otherStyles as $type => $styles) {
+                    if ($type=='*')
+                        continue;
 
-			foreach($otherStyles as $type => $styles) {
-				if ($type=='*')
-					continue;
+                    $local = [];
 
-				$local = [];
+                    $styles = array_merge($styles, $allStyles);
+                    foreach($styles as $key => $style) {
+                        $styleObj = new \stdClass();
+                        $styleObj->id = $key;
+                        $styleObj->text = $style;
+                        $local[] =  $styleObj;
+                    }
 
-				$styles = array_merge($styles, $allStyles);
-				foreach($styles as $key => $style) {
-					$styleObj = new \stdClass();
-					$styleObj->id = $key;
-					$styleObj->text = $style;
-					$local[] =  $styleObj;
-				}
+                    $this->stylesJSON[$type] = $local;
+                }
+            }
 
-				$allStylesJSON[$type] = $local;
-			}
+            add_action('acf/input/admin_enqueue_scripts', function() {
+                wp_register_style( 'tag-editor-css', ILAB_STEM_CONTENT_URI . 'public/css/jquery.tag-editor.css', false, '1.0.0' );
+                wp_enqueue_style( 'tag-editor-css' );
 
-			add_action('acf/input/admin_footer', function() use ($allStylesJSON) {
+
+                // register script
+                wp_register_script( 'jquery-caret-js', ILAB_STEM_CONTENT_URI . 'public/js/jquery.caret.min.js', false, '1.0.0');
+                wp_enqueue_script( 'jquery-caret-js' );
+
+                wp_register_script( 'jquery-tag-editor-js', ILAB_STEM_CONTENT_URI . 'public/js/jquery.tag-editor.min.js', ['jquery-caret-js'], '1.0.0');
+                wp_enqueue_script( 'jquery-tag-editor-js' );
+            });
+
+			add_action('acf/input/admin_footer', function() {
+			    acf_enqueue_scripts()
 				?>
 				<script>
-					var allStylesJSON = <?php echo json_encode($allStylesJSON, JSON_PRETTY_PRINT); ?>;
 					(function($){
 						acf.add_action('after_duplicate',function($old, $el){
 							$($el).find('input[data-type="css-classes"]').each(function(){
-								var sel = $(this);
-								var contentType = sel.data('content-type');
-								sel.select2('destroy');
-								console.log(contentType);
-								console.log(sel.select2({
-									tags: allStylesJSON[contentType],
-									width: "100%"
-								}));
-								sel.select2("container").find("ul.select2-choices").sortable({
-									containment: 'parent',
-									start: function() { sel.select2("onSortStart"); },
-									update: function() { sel.select2("onSortEnd"); }
-								});
+                                var sel = $(this);
+
+                                sel.tagEditor({
+                                   maxLength: 512,
+                                   placeholder: "Select CSS classes ...",
+                                   forceLowercase: false,
+                                   autocomplete: {
+                                       delay: 0,
+                                       position: { collision: 'flip' },
+                                       source: <?php echo json_encode($this->stylesJSON) ?>
+                                   }
+                                });
 							});
 						});
 					})(jQuery);
@@ -99,8 +112,14 @@ class CSSClassesField extends \acf_field  {
 	}
 
 	function update_value($value) {
-		if (is_array($value) && (count($value)==1))
-			return explode(',',$value[0]);
+		if (is_array($value) && (count($value)==1)) {
+		    $vals = explode(',',$value[0]);
+		    if ((count($vals) > 0) && empty($vals[0])) {
+                array_shift($vals);
+            }
+
+            return $vals;
+        }
 
 		return $value;
 	}
@@ -131,13 +150,14 @@ class CSSClassesField extends \acf_field  {
 		}
 		Log::info('field',$field);
 
-		$stylesJSON = [];
+        $this->stylesJSON = [];
 		foreach($styles as $key => $style) {
+//            $this->stylesJSON[] = $style;
 			$styleObj = new \stdClass();
-			$styleObj->id = $key;
-			$styleObj->text = $style;
+			$styleObj->value = $key;
+			$styleObj->label = $style;
 
-			$stylesJSON[] = $styleObj;
+            $this->stylesJSON[] = $styleObj;
 		}
 
 		$val=$field['value'];
@@ -150,27 +170,29 @@ class CSSClassesField extends \acf_field  {
 
 		$suid = 's'.uniqid();
 
-		if (strpos($field['name'],'acfcloneindex')===false) {
+		?>
+        <input type="text" id="<?php echo $suid;?>_css" name="<?php echo esc_attr($field['name']) ?>[]" data-type="css-classes" data-content-type="<?php echo $content_type?>">
+        <?php
+        if (strpos($field['name'],'acfcloneindex') === false) {
 			?>
-			<input type="hidden" name="<?php echo esc_attr($field['name']) ?>[]" data-type="css-classes" data-content-type="<?php echo $content_type?>" id="<?php echo $suid?>_css" value="<?php echo implode(',',$val) ?>">
 			<script>
 				(function($){
 					var $sel = $('#<?php echo $suid;?>_css');
-					$sel.select2({
-						tags: <?php echo json_encode($stylesJSON, JSON_PRETTY_PRINT)?>,
-						width: "100%"
-					});
-					$sel.select2("container").find("ul.select2-choices").sortable({
-						containment: 'parent',
-						start: function() { $sel.select2("onSortStart"); },
-						update: function() { $sel.select2("onSortEnd"); }
-					});
+
+                    $sel.tagEditor({
+                        maxLength: 512,
+                        initialTags: <?php echo json_encode($val) ?>,
+                        placeholder: "Select CSS classes ...",
+                        forceLowercase: false,
+                        autocomplete: {
+                            delay: 0,
+                            minLength: 0,
+                            position: { collision: 'flip' },
+                            source: <?php echo json_encode($this->stylesJSON) ?>
+                        }
+                    });
 				})(jQuery);
 			</script>
-			<?php
-		} else {
-			?>
-			<input type="hidden" name="<?php echo esc_attr($field['name']) ?>[]" data-type="css-classes" data-content-type="<?php echo $content_type?>">
 			<?php
 		}
 	}
