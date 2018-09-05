@@ -43,7 +43,9 @@ class PageHero extends ContentBlock {
 		$this->title = arrayPath($data, 'hero_title', null);
 		$this->text = arrayPath($data, 'hero_text', null);
 
-		$this->parseLink($page->id, $context, 'hero_');
+		$this->parseLinkFromData($data, $context, 'hero_');
+
+		$this->linkCSSClasses .= ' hero-button';
 	}
 
 	/**
