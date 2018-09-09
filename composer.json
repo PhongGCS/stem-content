@@ -2,7 +2,7 @@
   "name": "stem-press/stem-content",
   "description": "Plugin for Stem that extends with a basic framework for content blocks in WordPress.",
   "type": "wordpress-plugin",
-  "license": "LGPL",
+  "license": "LGPL-3.0-or-later",
   "keywords": ["stem","content"],
   "authors": [
     {

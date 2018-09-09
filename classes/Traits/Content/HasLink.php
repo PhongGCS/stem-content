@@ -109,7 +109,7 @@ trait HasLink {
 			$this->linkURL = $this->linkObject->permalink();
 		} else if (($this->linkType=='file') && $fileLinkID) {
 			$this->linkObject = $context->modelForPostID($fileLinkID);
-			$this->linkURL = $this->linkObject->permalink();
+			$this->linkURL = $this->linkObject->url();
 		} else if (($this->linkType == 'external') && $externalUrl) {
 			$this->linkURL = $externalUrl;
 		} else if (($this->linkType == 'relative') && $relativeUrl) {
