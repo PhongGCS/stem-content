@@ -117,7 +117,7 @@ trait HasLink {
 		}
 
 		if (!empty($linkAnchor)) {
-			$this->linkURL .= '#'.$linkAnchor;
+			$this->linkURL .= '#'.trim($linkAnchor,'#');
 		}
 	}
 

@@ -4,7 +4,7 @@ Plugin Name: Content plugin for ILAB Stem App Framework
 Plugin URI: https://github.com/jawngee/stem-content
 Description: Plugin for Stem that extends with a basic framework for content blocks in WordPress.
 Author: Jon Gilkison
-Version: 0.0.8
+Version: 0.1.0
 Author URI: http://interfacelab.io
 */
 
