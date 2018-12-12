@@ -2,6 +2,7 @@
 namespace ILab\StemContent\Models;
 
 use Stem\Core\Context;
+use Stem\Models\Attachment;
 use Stem\Models\Page;
 use Stem\Models\Post;
 
@@ -75,8 +76,9 @@ class ContentBlock {
 		$this->context = $context;
 
 		$cssClasses = arrayPath($data, 'container_css', null);
-		if ($cssClasses && is_array($cssClasses))
+		if ($cssClasses && is_array($cssClasses)) {
 			$this->containerCSS = implode(' ', $cssClasses);
+		}
 	}
 
 	/**
@@ -90,6 +92,27 @@ class ContentBlock {
 	 */
 	public function supportsPartial($key) {
 		return false;
+	}
+
+	/**
+	 * Turns an ID in the content data into an Attachment object
+	 * @param $data
+	 * @param $field
+	 *
+	 * @return Attachment|null
+	 */
+	protected function parseImage($data, $field) {
+		$imageID = arrayPath($data, $field, null);
+		if (!empty($imageID)) {
+			if (is_numeric($imageID)) {
+				return $this->context->modelForPostID($imageID);
+			} else if ($imageID instanceof \WP_Post) {
+				return $this->context->modelForPost($imageID);
+			}
+		}
+
+
+		return null;
 	}
 
 	/**

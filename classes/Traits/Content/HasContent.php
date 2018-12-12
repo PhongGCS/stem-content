@@ -27,7 +27,7 @@ trait HasContent {
 	 * @param Page $page
 	 */
 	public function buildContent(Context $context, Page $page) {
-		$contentData = get_field("content", $page->id);
+		$contentData = get_field("content", $page->id());
 		$this->content = new ContentBlockContainer($context, $contentData, null, $page);
 	}
 }
