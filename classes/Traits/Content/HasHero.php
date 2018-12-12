@@ -3,8 +3,8 @@ namespace ILab\StemContent\Traits\Content;
 
 use ILab\StemContent\Models\Content\PageHero;
 
-use ILab\Stem\Core\Context;
-use ILab\Stem\Models\Page;
+use Stem\Core\Context;
+use Stem\Models\Page;
 
 /**
  * Class HasHero

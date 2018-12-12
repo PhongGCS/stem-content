@@ -1,9 +1,9 @@
 <?php
 namespace ILab\StemContent\Controllers;
 
-use ILab\Stem\Controllers\PageController;
-use ILab\Stem\Core\Context;
-use ILab\Stem\Core\Response;
+use Stem\Controllers\PageController;
+use Stem\Core\Context;
+use Stem\Core\Response;
 use ILab\StemContent\Traits\Content\HasContent;
 use ILab\StemContent\Traits\Content\HasContentInterface;
 use ILab\StemContent\Traits\Content\HasHeroInterface;

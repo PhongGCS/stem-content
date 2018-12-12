@@ -2,7 +2,7 @@
 
 namespace ILab\StemContent\Models\Content;
 
-use ILab\Stem\Core\Context;
+use Stem\Core\Context;
 
 /**
  * Class FeatureListItem

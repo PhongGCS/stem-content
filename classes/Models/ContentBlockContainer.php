@@ -1,10 +1,10 @@
 <?php
 namespace ILab\StemContent\Models;
 
-use ILab\Stem\Core\Context;
-use ILab\Stem\Core\Log;
-use ILab\Stem\Models\Page;
-use ILab\Stem\Models\Post;
+use Stem\Core\Context;
+use Stem\Core\Log;
+use Stem\Models\Page;
+use Stem\Models\Post;
 
 /**
  * Class ContentBlockContainer

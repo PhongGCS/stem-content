@@ -2,8 +2,8 @@
 
 namespace ILab\StemContent\ACF;
 
-use ILab\Stem\Core\Context;
-use ILab\Stem\Core\Log;
+use Stem\Core\Context;
+use Stem\Core\Log;
 
 class ContentTemplateField extends \acf_field  {
 	function __construct() {

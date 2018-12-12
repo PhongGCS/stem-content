@@ -2,8 +2,8 @@
 
 namespace ILab\StemContent\Models\Editor;
 
-use ILab\Stem\Core\Context;
-use ILab\Stem\UI\EditorPlugin;
+use Stem\Core\Context;
+use Stem\UI\EditorPlugin;
 
 class CodeBlockEditorPlugin extends EditorPlugin {
 	private $languages=[

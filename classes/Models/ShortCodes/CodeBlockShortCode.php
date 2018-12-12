@@ -2,7 +2,7 @@
 
 namespace ILab\StemContent\Models\ShortCodes;
 
-use ILab\Stem\UI\ShortCode;
+use Stem\UI\ShortCode;
 use ILab\StemContent\Models\Content\CodeBlock;
 use ILab\StemContent\Models\ContentBlock;
 

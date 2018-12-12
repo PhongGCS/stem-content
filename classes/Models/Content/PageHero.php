@@ -5,9 +5,9 @@ namespace ILab\StemContent\Models\Content;
 use ILab\StemContent\Models\ContentBlock;
 use ILab\StemContent\Traits\Content\HasLink;
 
-use ILab\Stem\Core\Context;
-use ILab\Stem\Models\Page;
-use ILab\Stem\Models\Post;
+use Stem\Core\Context;
+use Stem\Models\Page;
+use Stem\Models\Post;
 
 /**
  * Class PageHero
@@ -54,7 +54,7 @@ class PageHero extends ContentBlock {
 
 	/**
 	 * The background image.
-	 * @return \ILab\Stem\Models\Attachment|null
+	 * @return \Stem\Models\Attachment|null
 	 */
 	public function backgroundImage() {
 		return $this->backgroundImage;
@@ -62,7 +62,7 @@ class PageHero extends ContentBlock {
 
 	/**
 	 * Foreground image
-	 * @return \ILab\Stem\Models\Attachment|null
+	 * @return \Stem\Models\Attachment|null
 	 */
 	public function image() {
 		return $this->image;
