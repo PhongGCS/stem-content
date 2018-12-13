@@ -1,6 +1,7 @@
 <?php
 namespace ILab\StemContent\Controllers;
 
+use ILab\StemContent\Models\ContentBlock;
 use Stem\Controllers\PageController;
 use Stem\Core\Context;
 use Stem\Core\Response;
@@ -21,6 +22,7 @@ class ContentPageController extends PageController implements HasContentInterfac
 	use HasContent;
 
 	protected $targetPagePath;
+	protected $defaultViewParameters;
 
 	public function __construct(Context $context, $template=null) {
 		if ($template == null)
@@ -46,9 +48,12 @@ class ContentPageController extends PageController implements HasContentInterfac
 	public function getIndex(Request $request) {
 		if ($request->query->has('partial')) {
 			$result='';
+
+			/** @var ContentBlock $content */
 			foreach($this->content->content as $content) {
-				if ($content->supportsPartial($request->query->get('partial')))
-					$result.=$content->render();
+				if ($content->supportsPartial($request->query->get('partial'))) {
+					$result .= $content->render();
+				}
 			}
 
 			return new \Symfony\Component\HttpFoundation\Response($result);
@@ -60,8 +65,13 @@ class ContentPageController extends PageController implements HasContentInterfac
 				'page' => $this
 			];
 
-			if (($this instanceof HasHeroInterface) ||($this instanceof HasHeroSliderInterface))
+			if (!empty($this->defaultViewParameters)) {
+				$data = array_merge($this->defaultViewParameters, $data);
+			}
+
+			if (($this instanceof HasHeroInterface) ||($this instanceof HasHeroSliderInterface)) {
 				$data['hero'] = $this->hero();
+			}
 
 			$res = new Response($this->template, $data);
 
