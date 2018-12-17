@@ -38,6 +38,8 @@ class ContentBlockContainer {
 		$this->context = $context;
 
 		if ($contentData && is_array($contentData)) {
+			/** @var ContentBlock $previousContentBlock */
+			$previousContentBlock = null;
 			foreach($contentData as $contentObj) {
 				if (!isset($contentObj["acf_fc_layout"]))
 					continue;
@@ -45,7 +47,15 @@ class ContentBlockContainer {
 				$contentType = $contentObj["acf_fc_layout"];
 				$contentTypeClass = $context->ui->setting("content/map/{$contentType}");
 				if (class_exists($contentTypeClass)) {
-					$this->content[] = new $contentTypeClass($context, $contentObj, $post, $page);
+					/** @var ContentBlock $contentBlock */
+					$contentBlock = new $contentTypeClass($context, $contentObj, $post, $page);
+					if ($previousContentBlock != null) {
+						$previousContentBlock->setNextContentBlock($contentBlock);
+					}
+
+					$this->content[] = $contentBlock;
+
+					$previousContentBlock = $contentBlock;
 				} else {
 					Log::warning("$contentTypeClass does not exist for $contentType");
 				}

@@ -27,6 +27,19 @@ class ContentBlock {
 	protected $containerCSS = null;
 
 	/**
+	 * The previous content block
+	 * @var null|ContentBlock
+	 */
+	protected $previousBlock = null;
+
+	/**
+	 * The next content block
+	 * @var null|ContentBlock
+	 */
+	protected $nextBlock = null;
+
+
+	/**
 	 * Context
 	 * @var Context|null
 	 */
@@ -140,4 +153,23 @@ class ContentBlock {
 	public function containerCSS() {
 		return $this->containerCSS;
 	}
+
+	/**
+	 * Sets the previous content block
+	 * @param $previous ContentBlock
+	 */
+	public function setPreviousContentBlock($previous) {
+		$this->previousBlock = $previous;
+		$previous->nextBlock = $this;
+	}
+
+	/**
+	 * Sets the next content block
+	 * @param $next ContentBlock
+	 */
+	public function setNextContentBlock($next) {
+		$this->nextBlock = $next;
+		$next->previousBlock = $this;
+	}
+
 }
