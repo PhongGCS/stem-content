@@ -21,6 +21,7 @@ trait HasLink {
 	protected $linkURL = null;
 	protected $linkTitle = null;
 	protected $linkImage = null;
+	protected $linkVideoEmbed = null;
 	protected $linkBackgroundImage = null;
 	protected $linkCSSClasses = null;
 	protected $linkRelationships = null;
@@ -88,6 +89,8 @@ trait HasLink {
 		$this->linkDownloadFileName = arrayPath($data, "{$prefix}link_download_file_name", null);
 		$this->linkTitle = arrayPath($data, "{$prefix}link_title", null);
 		$this->linkCSSClasses = arrayPath($data, "{$prefix}link_css_class", null);
+		$this->linkVideoEmbed = arrayPath($data, "{$prefix}video_embed", null);
+
 		$this->linkIcon = arrayPath($data, "{$prefix}link_icon", null);
 		if ($this->linkIcon == 'None') {
 			$this->linkIcon = null;
@@ -114,6 +117,9 @@ trait HasLink {
 			$this->linkURL = $externalUrl;
 		} else if (($this->linkType == 'relative') && $relativeUrl) {
 			$this->linkURL = $relativeUrl;
+		} else if ($this->linkType == 'video') {
+			$this->linkURL = '#';
+			$this->linkCSSClasses .= ' video-popup';
 		}
 
 		if (!empty($linkAnchor)) {
