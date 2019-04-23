@@ -1,5 +1,5 @@
 <?php
-namespace ILab\StemContent\Models;
+namespace Stem\Content\Models;
 
 use Stem\Core\Context;
 use Stem\Core\Log;
@@ -11,7 +11,7 @@ use Stem\Models\Post;
  *
  * Container for all content blocks on a given page.  This required the use of ACF Pro's flexible content.
  *
- * @package ILab\StemContent\Models
+ * @package Stem\Content\Models
  */
 class ContentBlockContainer {
 	/**

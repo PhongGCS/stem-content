@@ -1,5 +1,5 @@
 <?php
-namespace ILab\StemContent\Models;
+namespace Stem\Content\Models;
 
 use Stem\Core\Context;
 use Stem\Models\Attachment;
@@ -11,7 +11,7 @@ use Stem\Models\Post;
  *
  * Base type for content blocks
  *
- * @package ILab\StemContent\Models
+ * @package Stem\Content\Models
  */
 class ContentBlock {
 	/**

@@ -1,14 +1,12 @@
 <?php
-namespace ILab\StemContent\Controllers;
+namespace Stem\Content\Controllers;
 
-use ILab\StemContent\Models\ContentBlock;
+use Stem\Content\Models\ContentBlock;
 use Stem\Controllers\PageController;
 use Stem\Core\Context;
 use Stem\Core\Response;
-use ILab\StemContent\Traits\Content\HasContent;
-use ILab\StemContent\Traits\Content\HasContentInterface;
-use ILab\StemContent\Traits\Content\HasHeroInterface;
-use ILab\StemContent\Traits\Content\HasHeroSliderInterface;
+use Stem\Content\Traits\HasContent;
+use Stem\Content\Traits\HasContentInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller for pages that use content blocks.
  *
- * @package ILab\StemContent\Controllers
+ * @package Stem\Content\Controllers
  */
 class ContentPageController extends PageController implements HasContentInterface {
 	use HasContent;
@@ -39,9 +37,6 @@ class ContentPageController extends PageController implements HasContentInterfac
 
 		if ($this->page) {
 			$this->buildContent($context, $this->page);
-
-			if (($this instanceof HasHeroInterface) || ($this instanceof HasHeroSliderInterface))
-				$this->buildHero($context, $this->page);
 		}
 	}
 
@@ -67,10 +62,6 @@ class ContentPageController extends PageController implements HasContentInterfac
 
 			if (!empty($this->defaultViewParameters)) {
 				$data = array_merge($this->defaultViewParameters, $data);
-			}
-
-			if (($this instanceof HasHeroInterface) ||($this instanceof HasHeroSliderInterface)) {
-				$data['hero'] = $this->hero();
 			}
 
 			$res = new Response($this->template, $data);

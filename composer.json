@@ -11,11 +11,12 @@
     }
   ],
   "require": {
+    "stem-press/stem": ">=0.5.8"
   },
   "require-dev": {},
   "autoload": {
     "psr-4": {
-      "ILab\\StemContent\\": "classes"
+      "Stem\\Content\\": "classes"
     }
   }
 }
