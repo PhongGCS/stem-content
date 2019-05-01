@@ -13,7 +13,8 @@ use Stem\Models\Post;
  *
  * @package Stem\Content\Models
  */
-class ContentBlock {
+abstract class ContentBlock {
+	//region Member variables
 	/**
 	 * The name of the template that this content block uses to render.
 	 * @var null|string
@@ -38,34 +39,41 @@ class ContentBlock {
 	 */
 	protected $nextBlock = null;
 
-
 	/**
 	 * Context
 	 * @var Context|null
 	 */
-	public $context = null;
-
-	/**
-	 * This flag indicates that the front end is requesting a "partial" render, meaning that this content block should
-	 * render itself in a special way as to only include the elements that can be appended to the DOM on the front end.
-	 * For example, if this content block were a list of posts, a "partial" render would only return the individual
-	 * posts elements, not the container that houses them.
-	 * @var bool
-	 */
-	public $partial = false;
+	protected $context = null;
 
 	/**
 	 * If on a Post page, this would be the post for that page.
 	 * @var Post|null
 	 */
-	public $post = null;
+	protected $post = null;
 
 	/**
 	 * The page that this content exists on, may be null.
 	 * @var Page|null
 	 */
-	public $page = null;
+	protected $page = null;
 
+	/**
+	 * The content data
+	 * @var null|array
+	 */
+	protected $data = null;
+
+	/**
+	 * The content properties
+	 * @var ContentBlockProperties
+	 */
+	protected $props;
+
+
+
+	//endregion
+
+	//region Constructor
 	/**
 	 * ContentBlock constructor.
 	 *
@@ -76,11 +84,14 @@ class ContentBlock {
 	 * @param null $template
 	 */
 	public function __construct(Context $context, $data = null, Post $post = null, Page $page = null, $template = null) {
+		$this->data = $data;
+		$this->props = new ContentBlockProperties($data);
+
 		$userTemplate = arrayPath($data, 'template', null);
 
 		if ($userTemplate) {
 			$this->template = $userTemplate;
-		} else {
+		} else if (!empty($template)) {
 			$this->template = $template;
 		}
 
@@ -92,6 +103,27 @@ class ContentBlock {
 		if ($cssClasses && is_array($cssClasses)) {
 			$this->containerCSS = implode(' ', $cssClasses);
 		}
+	}
+
+	//endregion
+
+	//region Magic
+	public function __get($name) {
+		return $this->props->__get($name);
+	}
+
+	public function __isset($name) {
+		return $this->props->__isset($name);
+	}
+	//endregion
+
+	//region Properties
+	/**
+	 * Returns the content identifier for this block
+	 * @return null|string
+	 */
+	public static function identifier() {
+		return null;
 	}
 
 	/**
@@ -108,42 +140,27 @@ class ContentBlock {
 	}
 
 	/**
-	 * Turns an ID in the content data into an Attachment object
-	 * @param $data
-	 * @param $field
-	 *
-	 * @return Attachment|null
+	 * If on a Post page, this would be the post for that page.
+	 * @return Post|null
 	 */
-	protected function parseImage($data, $field) {
-		$imageID = arrayPath($data, $field, null);
-		if (!empty($imageID)) {
-			if (is_numeric($imageID)) {
-				return $this->context->modelForPostID($imageID);
-			} else if ($imageID instanceof \WP_Post) {
-				return $this->context->modelForPost($imageID);
-			}
-		}
-
-
-		return null;
+	public function post() {
+		return $this->post;
 	}
 
 	/**
-	 * Renders the content type.  If you support partial rendering in your content block, you need to override this.
-	 *
-	 * @param null $otherData
-	 *
-	 * @return string
+	 * The page that this content exists on, may be null.
+	 * @return Page|null
 	 */
-	public function render($otherData=null) {
-		if (!$this->template)
-			return '';
+	public function page() {
+		return $this->page;
+	}
 
-		$data = ['content' => $this];
-		if ($otherData)
-			$data=array_merge($data, $otherData);
-
-		return $this->context->ui->render($this->template, $data);
+	/**
+	 * The context of the page
+	 * @return Context|null
+	 */
+	public function context() {
+		return $this->context;
 	}
 
 	/**
@@ -172,4 +189,50 @@ class ContentBlock {
 		$next->previousBlock = $this;
 	}
 
+	//endregion
+
+	//region Utility Functions
+
+	/**
+	 * Turns an ID in the content data into a Post object
+	 * @param $data
+	 * @param $field
+	 *
+	 * @return Post|null
+	 */
+	protected function parsePost($data, $field) {
+		$pid = arrayPath($data, $field, null);
+		if (!empty($pid)) {
+			if (is_numeric($pid)) {
+				return $this->context->modelForPostID($pid);
+			} else if ($pid instanceof \WP_Post) {
+				return $this->context->modelForPost($pid);
+			}
+		}
+
+		return null;
+	}
+	//endregion
+
+	//region Rendering
+	/**
+	 * Renders the content type.  If you support partial rendering in your content block, you need to override this.
+	 *
+	 * @param bool $partial
+	 * @param array|null $otherData
+	 *
+	 * @return string
+	 */
+	public function render($partial=false, $otherData=null) {
+		if (!$this->template)
+			return '';
+
+		$data = ['content' => $this, 'partial' => $partial];
+		if ($otherData) {
+			$data=array_merge($data, $otherData);
+		}
+
+		return $this->context->ui->render($this->template, $data);
+	}
+	//endregion
 }

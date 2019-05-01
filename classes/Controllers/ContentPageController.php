@@ -23,8 +23,9 @@ class ContentPageController extends PageController implements HasContentInterfac
 	protected $defaultViewParameters;
 
 	public function __construct(Context $context, $template=null) {
-		if ($template == null)
+		if ($template == null) {
 			$template = 'templates/content-page';
+		}
 
 		parent::__construct($context, $template);
 
@@ -40,14 +41,18 @@ class ContentPageController extends PageController implements HasContentInterfac
 		}
 	}
 
+	protected function addIndexData($data) {
+		return $data;
+	}
+
 	public function getIndex(Request $request) {
 		if ($request->query->has('partial')) {
 			$result='';
 
 			/** @var ContentBlock $content */
-			foreach($this->content->content as $content) {
+			foreach($this->content->content() as $content) {
 				if ($content->supportsPartial($request->query->get('partial'))) {
-					$result .= $content->render();
+					$result .= $content->render(true);
 				}
 			}
 
@@ -56,9 +61,11 @@ class ContentPageController extends PageController implements HasContentInterfac
 			$data = [
 				'errors' => [],
 				'params' => $request->request,
-				'content' => $this->content,
+				'content' => $this->content->content(),
 				'page' => $this
 			];
+
+			$data = $this->addIndexData($data);
 
 			if (!empty($this->defaultViewParameters)) {
 				$data = array_merge($this->defaultViewParameters, $data);

@@ -14,17 +14,18 @@ use Stem\Models\Post;
  * @package Stem\Content\Models
  */
 class ContentBlockContainer {
+
 	/**
 	 * List of content blocks
 	 * @var array
 	 */
-	public $content=[];
+	protected $content = [];
 
 	/**
 	 * Context
 	 * @var Context|null
 	 */
-	public $context=null;
+	protected $context = null;
 
 	/**
 	 * ContentBlockContainer constructor.
@@ -34,32 +35,51 @@ class ContentBlockContainer {
 	 * @param Post|null $post
 	 * @param Page|null $page
 	 */
-	public function __construct(Context $context, $contentData, Post $post=null, Page $page=null){
+	public function __construct(Context $context, $contentData, Post $post = null, Page $page = null) {
 		$this->context = $context;
 
-		if ($contentData && is_array($contentData)) {
+		if($contentData && is_array($contentData)) {
+			$blockClasses = $context->ui->setting('content/blocks', []);
+			$blockClasses = apply_filters('heavymetal/ui/content/blocks', $blockClasses);
+
+			$contentBlockMap = [];
+			foreach($blockClasses as $blockClass) {
+				$contentBlockMap[$blockClass::identifier()] = $blockClass;
+			}
+
 			/** @var ContentBlock $previousContentBlock */
 			$previousContentBlock = null;
 			foreach($contentData as $contentObj) {
-				if (!isset($contentObj["acf_fc_layout"]))
-					continue;
+				if(!isset($contentObj["acf_fc_layout"])) continue;
 
 				$contentType = $contentObj["acf_fc_layout"];
-				$contentTypeClass = $context->ui->setting("content/map/{$contentType}");
-				if (class_exists($contentTypeClass)) {
-					/** @var ContentBlock $contentBlock */
-					$contentBlock = new $contentTypeClass($context, $contentObj, $post, $page);
-					if ($previousContentBlock != null) {
-						$previousContentBlock->setNextContentBlock($contentBlock);
+				if(isset($contentBlockMap[$contentType])) {
+					$contentTypeClass = $contentBlockMap[$contentType];
+					if (class_exists($contentTypeClass)) {
+						/** @var ContentBlock $contentBlock */
+						$contentBlock = new $contentTypeClass($context, $contentObj, $post, $page);
+						if($previousContentBlock != null) {
+							$previousContentBlock->setNextContentBlock($contentBlock);
+						}
+
+						$this->content[] = $contentBlock;
+
+						$previousContentBlock = $contentBlock;
+					} else {
+						Log::warning("Content block class '$contentTypeClass' does not exist.");
 					}
-
-					$this->content[] = $contentBlock;
-
-					$previousContentBlock = $contentBlock;
 				} else {
-					Log::warning("$contentTypeClass does not exist for $contentType");
+					Log::warning("Content type '$contentType' does not exist.");
 				}
 			}
 		}
+	}
+
+	/**
+	 * The content contained in this container
+	 * @return ContentBlock[]
+	 */
+	public function content() {
+		return $this->content;
 	}
 }
