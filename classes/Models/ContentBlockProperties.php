@@ -102,7 +102,7 @@ class ContentBlockProperties {
 	 */
 	public function addArray($name, $itemCallback) {
 		$array = [];
-		$val = arrayPath($this->data, $name, []);
+		$val = arrayPath($this->data, $name, []) ?: [];
 
 		if (empty($itemCallback)) {
 			$array = $val;

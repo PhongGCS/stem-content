@@ -215,6 +215,17 @@ abstract class ContentBlock {
 	//endregion
 
 	//region Rendering
+
+	/**
+	 * Allows subclasses to add additional view data when rendering
+	 *
+	 * @param array $data
+	 * @return array
+	 */
+	protected function additionalViewData($data) {
+		return $data;
+	}
+
 	/**
 	 * Renders the content type.  If you support partial rendering in your content block, you need to override this.
 	 *
@@ -231,6 +242,8 @@ abstract class ContentBlock {
 		if ($otherData) {
 			$data=array_merge($data, $otherData);
 		}
+
+		$data = $this->additionalViewData($data);
 
 		return $this->context->ui->render($this->template, $data);
 	}
