@@ -50,6 +50,28 @@ class ContentBlockProperties {
 	}
 
 	/**
+	 * Adds a multiline string as an array of strings, splitting on \n
+	 * @param string $name
+	 * @param string|null $defaultValue
+	 */
+	public function addMultilineString($name, $defaultValue = null) {
+		$val = arrayPath($this->data, $name, $defaultValue);
+
+		if (!is_string($val)) {
+			return;
+		}
+
+		$name = camelCaseString($name);
+		$this->props[$name] = [];
+		$vals = explode("\n", $val);
+		array_walk($vals, function($item) use ($name) {
+			if (!empty(trim($item))) {
+				$this->props[$name][] = $item;
+			}
+		});
+	}
+
+	/**
 	 * Adds a date
 	 * @param string $name
 	 * @param Carbon|null $defaultValue
