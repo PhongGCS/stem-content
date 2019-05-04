@@ -23,7 +23,8 @@ return [
 		'columns' => [
 		],
 		'fields' => [
-			\Stem\Content\Fields\ContentTemplateField::class
+			\Stem\Content\Fields\ContentTemplateField::class,
+			\Stem\Content\Fields\PostTypeField::class
 		],
 		'metaboxes' => [
 		],
