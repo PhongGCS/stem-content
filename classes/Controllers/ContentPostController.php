@@ -49,35 +49,13 @@ class ContentPostController extends PostController implements HasContentInterfac
 	}
 
 	public function getIndex(Request $request) {
-		if ($request->query->has('partial')) {
-			$result='';
+		$data = $this->addIndexData([
+			'errors' => [],
+			'params' => $request->request,
+			'post' => $this->post,
+			'page' => $this
+		]);
 
-			/** @var ContentBlock $content */
-			foreach($this->content->content() as $content) {
-				if ($content->supportsPartial($request->query->get('partial'))) {
-					$result .= $content->render(true);
-				}
-			}
-
-			return new \Symfony\Component\HttpFoundation\Response($result);
-		} else {
-			$data = [
-				'errors' => [],
-				'params' => $request->request,
-				'content' => $this->content->content(),
-				'post' => $this->post,
-				'page' => $this
-			];
-
-			$data = $this->addIndexData($data);
-
-			if (!empty($this->defaultViewParameters)) {
-				$data = array_merge($this->defaultViewParameters, $data);
-			}
-
-			$res = new Response($this->template, $data);
-
-			return $res;
-		}
+		return $this->renderContent($request->query->get('partial'), $this->template, $data);
 	}
 }

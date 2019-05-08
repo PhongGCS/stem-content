@@ -3,6 +3,8 @@ namespace Stem\Content\Controllers;
 
 use Stem\Content\Models\ContentBlock;
 use Stem\Controllers\PageController;
+use Stem\Controllers\PostController;
+use Stem\Controllers\PostsController;
 use Stem\Core\Context;
 use Stem\Core\Response;
 use Stem\Content\Traits\HasContent;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package Stem\Content\Controllers
  */
-class ContentPageController extends PageController implements HasContentInterface {
+class ContentPostsController extends PostsController implements HasContentInterface {
 	use HasContent;
 
 	protected $targetPagePath;
@@ -29,15 +31,11 @@ class ContentPageController extends PageController implements HasContentInterfac
 
 		parent::__construct($context, $template);
 
-		if (!$this->page && $this->targetPagePath) {
+		if ($this->targetPagePath) {
 			$pagePost = get_page_by_path($this->targetPagePath);
 
-			if ($pagePost) {
+			if ($pagePost)
 				$this->page = $context->modelForPost($pagePost);
-				if (empty($this->title)) {
-					$this->title = $this->page->title;
-				}
-			}
 		}
 
 		if ($this->page) {
@@ -53,10 +51,10 @@ class ContentPageController extends PageController implements HasContentInterfac
 		$data = $this->addIndexData([
 			'errors' => [],
 			'params' => $request->request,
+			'posts' => $this->posts,
 			'page' => $this
 		]);
 
 		return $this->renderContent($request->query->get('partial'), $this->template, $data);
 	}
-
 }

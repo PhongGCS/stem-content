@@ -7,7 +7,7 @@ return [
 		],
 		'taxonomies' => [
 		],
-		'controllers' => [
+		'template-controllers' => [
 			'Content Page' => \Stem\Content\Controllers\ContentPageController::class
 		],
 		'commands' => [

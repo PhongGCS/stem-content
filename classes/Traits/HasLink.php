@@ -106,10 +106,10 @@ trait HasLink {
 
 		if (($this->linkType=='post') && $postLink) {
 			$this->linkObject = $context->modelForPost($postLink);
-			$this->linkURL = $this->linkObject->permalink();
+			$this->linkURL = $this->linkObject->permalink;
 		} else if (($this->linkType=='page') && $pageLink) {
 			$this->linkObject = $context->modelForPost($pageLink);
-			$this->linkURL = $this->linkObject->permalink();
+			$this->linkURL = $this->linkObject->permalink;
 		} else if (($this->linkType=='file') && $fileLinkID) {
 			$this->linkObject = $context->modelForPostID($fileLinkID);
 			$this->linkURL = $this->linkObject->url();
