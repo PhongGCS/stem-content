@@ -2,9 +2,10 @@
 namespace Stem\Content\Models;
 
 use Stem\Core\Context;
-use Stem\Models\Attachment;
 use Stem\Models\Page;
 use Stem\Models\Post;
+use Stem\Models\User;
+use StoutLogic\AcfBuilder\FieldsBuilder;
 
 /**
  * Class ContentBlock
@@ -14,6 +15,13 @@ use Stem\Models\Post;
  * @package Stem\Content\Models
  */
 abstract class ContentBlock {
+	//region Class variables
+
+	/** @var string[] Property types  */
+	protected static $propertyTypes = [];
+
+	//endregion
+
 	//region Member variables
 	/**
 	 * The name of the template that this content block uses to render.
@@ -68,9 +76,6 @@ abstract class ContentBlock {
 	 * @var ContentBlockProperties
 	 */
 	protected $props;
-
-
-
 	//endregion
 
 	//region Constructor
@@ -95,6 +100,10 @@ abstract class ContentBlock {
 			$this->template = $template;
 		}
 
+		if (empty($this->template)) {
+			$this->template = 'content.'.static::identifier();
+		}
+
 		$this->page = $page;
 		$this->post = $post;
 		$this->context = $context;
@@ -103,6 +112,8 @@ abstract class ContentBlock {
 		if ($cssClasses && is_array($cssClasses)) {
 			$this->containerCSS = implode(' ', $cssClasses);
 		}
+
+		$this->buildProperties();
 	}
 
 	//endregion
@@ -124,6 +135,144 @@ abstract class ContentBlock {
 	 */
 	public static function identifier() {
 		return null;
+	}
+
+	/**
+	 * Returns the title for the content type
+	 * @return null|string
+	 */
+	public static function title() {
+		return null;
+	}
+
+	/**
+	 * Allows subclasses to configure their ACF fields in code.  Don't worry about specifying the location
+	 * element, it will be added automatically if it is missing.
+	 *
+	 * @return FieldsBuilder|null
+	 */
+	public static function buildFields() {
+		return null;
+	}
+
+	public static function updatePropertyTypes($fields) {
+		$propTypes = [];
+
+		foreach($fields['fields'] as $field) {
+			$type = $field['type'];
+			$name = $field['name'];
+
+			if (($type == 'number') || ($type == 'range')) {
+				$propTypes[$name] = 'float';
+			} else if ($type == 'true_false') {
+				$propTypes[$name] = 'bool';
+			} else if ($type == 'checkbox') {
+				$propTypes[$name] = 'strings';
+			} else if (($type == 'gallery') || ($type == 'relationship')) {
+				$propTypes[$name] = 'objects';
+			} else if ($type == 'link') {
+				$propTypes[$name] = 'link';
+			} else if (in_array($type, ['image', 'file', 'post_object'])) {
+				$propTypes[$name] = 'object';
+			} else if (in_array($type, ['date_picker', 'date_time_picker'])) {
+				$propTypes[$name] = 'date';
+			} else if ($type == 'user') {
+				$propTypes[$name] = 'user';
+			} else if ($type == 'repeater') {
+				if (isset($field['repeater_item_class'])) {
+					$propTypes[$name] = 'array|'.$field['repeater_item_class'];
+				} else {
+					$propTypes[$name] = 'array';
+				}
+			} else {
+				$propTypes[$name] = 'string';
+			}
+		}
+
+		static::$propertyTypes[static::class] = $propTypes;
+	}
+
+	protected function buildProperties() {
+		if (!isset(static::$propertyTypes[static::class])) {
+			return;
+		}
+
+		$propTypes = static::$propertyTypes[static::class];
+
+		foreach($propTypes as $name => $type) {
+			if ($type == 'float') {
+				$this->props->addFloat($name);
+			} else if ($type == 'string') {
+				$this->props->addString($name);
+			} else if ($type == 'strings') {
+				$this->props->addArray($name, function($item) {
+					return $item;
+				});
+			} else if ($type == 'bool') {
+				$this->props->addBool($name);
+			} else if ($type == 'date') {
+				$this->props->addDate($name);
+			} else if ($type == 'objects') {
+				$this->props->addArray($name, function($item) {
+					if (is_array($item) && isset($item['ID'])) {
+						return $this->context->modelForPostID($item['ID']);
+					} else if (is_numeric($item)) {
+						return $this->context->modelForPostID($item);
+					} else if ($item instanceof \WP_Post) {
+						return $this->context->modelForPost($item);
+					} else if ($item instanceof Post) {
+						return $item;
+					}
+
+					return null;
+				});
+			} else if ($type == 'object')  {
+				$this->props->addPostType($name);
+			} else if ($type == 'link')  {
+				$this->props->addLink($name);
+			} else if ($type == 'array') {
+				$this->props->addArray($name, function($item) {
+					if (is_array($item)) {
+						return (object)$item;
+					}
+
+					return $item;
+				});
+			}  else if (strpos($type, 'array|') === 0) {
+				$itemClass = str_replace('array|', '', $type);
+				$this->props->addArray($name, function($item) use ($itemClass) {
+					return new $itemClass($item);
+				});
+			} else if ($type == 'user') {
+				$this->props->addTransformer($name, function($item) {
+					if (is_numeric($item)) {
+						$item = get_user_by('id', $item);
+					} else if (is_array($item)) {
+						if (isset($item['id'])) {
+							$item = get_user_by('id', $item['id']);
+						} else if (isset($item['ID'])) {
+							$item = get_user_by('id', $item['ID']);
+						} else {
+							return null;
+						}
+					}
+
+					if ($item instanceof \WP_User) {
+						return new User($this->context, $item);
+					}
+
+					return null;
+				});
+			}
+		}
+	}
+
+	/**
+	 * The content targets that this block is applicable to
+	 * @return array
+	 */
+	public static function contentTargets() {
+		return ['main_content'];
 	}
 
 	/**

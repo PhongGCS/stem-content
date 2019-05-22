@@ -4,7 +4,7 @@ Plugin Name: Stem Content
 Plugin URI: https://github.com/jawngee/stem-content
 Description: Plugin for Stem that extends with a basic framework for content blocks in WordPress.
 Author: Jon Gilkison
-Version: 0.3.5
+Version: 0.4.0
 Author URI: http://interfacelab.io
 */
 
@@ -16,5 +16,5 @@ if (file_exists(STEM_CONTENT_DIR.'/vendor/autoload.php')) {
 }
 
 add_action('heavymetal/app/packages/install', function() {
-	new \Stem\Packages\Package(STEM_CONTENT_DIR, 'Stem Content', 'Package for providing easy to use page builder content blocks.');
+	new \Stem\Content\Package(STEM_CONTENT_DIR, 'Stem Content', 'Package for providing easy to use page builder content blocks.');
 });

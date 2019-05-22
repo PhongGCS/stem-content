@@ -130,11 +130,39 @@ class ContentBlockProperties {
 			$array = $val;
 		} else {
 			foreach($val as $valItem) {
-				$array[] = $itemCallback($valItem);
+				$item = $itemCallback($valItem);
+
+				if (!empty($item)) {
+					$array[] = $item;
+				}
 			}
 		}
 
 		$this->props[camelCaseString($name)] = $array;
+	}
+
+	/**
+	 * Adds an item that is transformed with a callback
+	 * @param string $name
+	 * @param null|callable $itemCallback
+	 */
+	public function addTransformer($name, $itemCallback) {
+		$val = arrayPath($this->data, $name);
+
+		if (!empty($val) && !empty($itemCallback)) {
+			$val = $itemCallback($val);
+		}
+
+		$this->props[camelCaseString($name)] = $val;
+	}
+
+	/**
+	 * Adds an item that represents a link (as defined in ACF)
+	 * @param $name
+	 */
+	public function addLink($name) {
+		$val = arrayPath($this->data, $name) ?: [];
+		$this->props[camelCaseString($name)] = new ACFLink($val);
 	}
 	//endregion
 

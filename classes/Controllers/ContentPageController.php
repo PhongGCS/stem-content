@@ -56,7 +56,7 @@ class ContentPageController extends PageController implements HasContentInterfac
 			'page' => $this
 		]);
 
-		return $this->renderContent($request->query->get('partial'), $this->template, $data);
+		return $this->renderContent($request->query->get('partial'), $request->query->get('partial-target'), $this->template, $data);
 	}
 
 }
