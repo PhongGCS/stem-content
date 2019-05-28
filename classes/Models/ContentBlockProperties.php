@@ -168,7 +168,7 @@ class ContentBlockProperties {
 
 	//region Magic
 	public function __get($name) {
-		if (isset($this->props[$name])) {
+		if (array_key_exists($name, $this->props)) {
 			return $this->props[$name];
 		}
 
