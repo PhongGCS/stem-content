@@ -1,7 +1,6 @@
 <?php
 namespace Stem\Content;
 
-use mysql_xdevapi\Exception;
 use Stem\Content\Models\ContentBlock;
 use Stem\Core\Context;
 use StoutLogic\AcfBuilder\FieldsBuilder;

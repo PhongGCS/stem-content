@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "stem-press/stem": ">=0.6.2"
+    "stem-press/stem": ">=0.7.2"
   },
   "require-dev": {},
   "autoload": {
