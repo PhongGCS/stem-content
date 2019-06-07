@@ -178,6 +178,12 @@ abstract class ContentBlock {
 				$propTypes[$name] = 'date';
 			} else if ($type == 'user') {
 				$propTypes[$name] = 'user';
+			}  else if (($type == 'taxonomy') && isset($field['taxonomy'])) {
+				if (!empty($field['multiple'])) {
+					$propTypes[$name] = 'taxonomies|'.$field['taxonomy'];
+				} else {
+					$propTypes[$name] = 'taxonomy|'.$field['taxonomy'];
+				}
 			} else if ($type == 'repeater') {
 				if (isset($field['repeater_item_class'])) {
 					$propTypes[$name] = 'array|'.$field['repeater_item_class'];
@@ -212,6 +218,12 @@ abstract class ContentBlock {
 				$this->props->addBool($name);
 			} else if ($type == 'date') {
 				$this->props->addDate($name);
+			} else if (strpos($type, 'taxonomy|') === 0) {
+				$tax = str_replace('taxonomy|', '', $type);
+				$this->props->addTaxonomy($name, $tax);
+			} else if (strpos($type, 'taxonomies|') === 0) {
+				$tax = str_replace('taxonomies|', '', $type);
+				$this->props->addTaxonomies($name, $tax);
 			} else if ($type == 'objects') {
 				$this->props->addArray($name, function($item) {
 					if (is_array($item) && isset($item['ID'])) {

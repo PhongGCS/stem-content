@@ -4,6 +4,8 @@ namespace Stem\Content\Models;
 use Carbon\Carbon;
 use Stem\Core\Context;
 use Stem\Models\Post;
+use Stem\Models\Taxonomy;
+use Stem\Models\Term;
 
 class ContentBlockProperties {
 	protected $data = [];
@@ -111,6 +113,61 @@ class ContentBlockProperties {
 				$model = Context::current()->modelForPost($val);
 			} else if ($val instanceof Post) {
 				$model = $val;
+			}
+		}
+
+		$this->props[camelCaseString($name)] = $model;
+	}
+
+	/**
+	 * Adds a taxonomy type
+	 * @param string $name
+	 * @param Post|null $defaultValue
+	 */
+	public function addTaxonomies($name, $taxonomy, $defaultValue = null) {
+		$val = arrayPath($this->data, $name, $defaultValue);
+
+		if (!is_array($val)) {
+			$val = [$val];
+		}
+
+		$models = [];
+		foreach($val as $value) {
+			$model = null;
+			if (!empty($value)) {
+				if (is_numeric($value)) {
+					$model = Term::term(Context::current(), $value, $taxonomy);
+				} else if ($value instanceof \WP_Term) {
+					$model = Term::termFromTermData(Context::current(), $value->to_array());
+				} else if (is_array($value)) {
+					$model = Term::termFromTermData(Context::current(), $value);
+				}
+			}
+
+			if (!empty($model)) {
+				$models[] = $model;
+			}
+		}
+
+		$this->props[camelCaseString($name)] = $models;
+	}
+
+	/**
+	 * Adds a taxonomy type
+	 * @param string $name
+	 * @param Post|null $defaultValue
+	 */
+	public function addTaxonomy($name, $taxonomy, $defaultValue = null) {
+		$val = arrayPath($this->data, $name, $defaultValue);
+
+		$model = null;
+		if (!empty($val)) {
+			if (is_numeric($val)) {
+				$model = Term::term(Context::current(), $val, $taxonomy);
+			} else if ($val instanceof \WP_Term) {
+				$model = Term::termFromTermData(Context::current(), $val->to_array());
+			} else if (is_array($val)) {
+				$model = Term::termFromTermData(Context::current(), $val);
 			}
 		}
 
