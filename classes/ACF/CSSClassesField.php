@@ -157,7 +157,9 @@ class CSSClassesField extends \acf_field  {
 				(function($){
 					var $sel = $('#<?php echo $suid;?>_css');
 					$sel.select2({
-						tags: <?php echo json_encode($stylesJSON, JSON_PRETTY_PRINT)?>,
+						data: <?php echo json_encode($stylesJSON, JSON_PRETTY_PRINT)?>,
+                        tags: true,
+                        multiple: true,
 						width: "100%"
 					});
 					$sel.select2("container").find("ul.select2-choices").sortable({
