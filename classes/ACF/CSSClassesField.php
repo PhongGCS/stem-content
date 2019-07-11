@@ -44,17 +44,19 @@ class CSSClassesField extends \acf_field  {
 							$($el).find('input[data-type="css-classes"]').each(function(){
 								var sel = $(this);
 								var contentType = sel.data('content-type');
-								sel.select2('destroy');
+								// sel.select2('destroy');
 								console.log(contentType);
 								console.log(sel.select2({
-									tags: allStylesJSON[contentType],
+                                    data: allStylesJSON[contentType],
+                                    tags: true,
+                                    multiple: true,
 									width: "100%"
 								}));
-								sel.select2("container").find("ul.select2-choices").sortable({
-									containment: 'parent',
-									start: function() { sel.select2("onSortStart"); },
-									update: function() { sel.select2("onSortEnd"); }
-								});
+								// sel.select2("container").find("ul.select2-choices").sortable({
+								// 	containment: 'parent',
+								// 	start: function() { sel.select2("onSortStart"); },
+								// 	update: function() { sel.select2("onSortEnd"); }
+								// });
 							});
 						});
 					})(jQuery);
@@ -162,11 +164,11 @@ class CSSClassesField extends \acf_field  {
                         multiple: true,
 						width: "100%"
 					});
-					$sel.select2("container").find("ul.select2-choices").sortable({
-						containment: 'parent',
-						start: function() { $sel.select2("onSortStart"); },
-						update: function() { $sel.select2("onSortEnd"); }
-					});
+					// $sel.select2("container").find("ul.select2-choices").sortable({
+					// 	containment: 'parent',
+					// 	start: function() { $sel.select2("onSortStart"); },
+					// 	update: function() { $sel.select2("onSortEnd"); }
+					// });
 				})(jQuery);
 			</script>
 			<?php
