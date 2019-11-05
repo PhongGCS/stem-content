@@ -4,7 +4,7 @@ Plugin Name: Stem Content
 Plugin URI: https://github.com/jawngee/stem-content
 Description: Plugin for Stem that extends with a basic framework for content blocks in WordPress.
 Author: Jon Gilkison
-Version: 0.4.3
+Version: 0.4.4
 Author URI: http://interfacelab.io
 */
 

@@ -42,16 +42,18 @@ class Package extends \Stem\Packages\Package {
 			$fields = $blockClass::buildFields();
 			$fieldsCache[$id] = $fields;
 
-			$blockClass::updatePropertyTypes($fields->build());
+			if (!empty($fields)) {
+				$blockClass::updatePropertyTypes($fields->build());
+			}
 		}
 
 		$targets = apply_filters('heavymetal/ui/content/pageContent/targets', []);
 		$targets = array_merge($targets, $context->ui->setting('content/pageContent/targets', []));
 
-
+		$index = 0;
 		foreach($targets as $targetName => $target) {
 			/** @var FieldsBuilder $targetBuilder */
-			$targetBuilder = new FieldsBuilder($targetName, ['position' => 'acf_after_title']);
+			$targetBuilder = new FieldsBuilder($targetName, ['position' => 'acf_after_title', 'menu_order' => $index]);
 			$targetBuilder->setGroupConfig('hide_on_screen', [
 				"the_content",
 				"discussion",
@@ -98,8 +100,12 @@ class Package extends \Stem\Packages\Package {
 				}
 			}
 
-			$targetFields = $targetBuilder->build();
-			acf_add_local_field_group($targetFields);
+			if (function_exists('acf_add_local_field_group')) {
+				$targetFields = $targetBuilder->build();
+				acf_add_local_field_group($targetFields);
+			}
+
+			$index++;
 		}
 	}
 }
