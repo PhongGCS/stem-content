@@ -53,7 +53,7 @@ class Package extends \Stem\Packages\Package {
 		$index = 0;
 		foreach($targets as $targetName => $target) {
 			/** @var FieldsBuilder $targetBuilder */
-			$targetBuilder = new FieldsBuilder($targetName, ['position' => 'acf_after_title', 'menu_order' => $index]);
+			$targetBuilder = new FieldsBuilder($targetName, ['show_in_rest' => 1, 'position' => 'acf_after_title', 'menu_order' => $index, 'show_in_graphql' => 1, 'graphql_field_name' => camelCaseString($targetName)]);
 			$targetBuilder->setGroupConfig('hide_on_screen', [
 				"the_content",
 				"discussion",
@@ -62,7 +62,7 @@ class Package extends \Stem\Packages\Package {
 				"send-trackbacks"
 			]);
 
-			$flexible = $targetBuilder->addFlexibleContent($targetName, ['title' => $target['title'], 'button_label' => 'Add Content']);
+			$flexible = $targetBuilder->addFlexibleContent($targetName, ['title' => $target['title'], 'button_label' => 'Add Content', 'show_in_rest' => 1, 'show_in_graphql' => 1, 'graphql_field_name' => camelCaseString($targetName.'_'.str_replace([' ', '-'], '_', $target['title']))]);
 
 			/** @var ContentBlock $blockClass */
 			foreach($blockClasses as $blockClass) {
@@ -80,7 +80,7 @@ class Package extends \Stem\Packages\Package {
 					continue;
 				}
 
-				$layout =  $flexible->addLayout($id, ['title' => $blockTitle, 'display' => 'block']);
+				$layout =  $flexible->addLayout($id, ['show_in_rest' => 1, 'title' => $blockTitle, 'display' => 'block', 'show_in_graphql' => 1, 'graphql_field_name' => camelCaseString($blockTitle)]);
 				if (!empty($fields) && is_a($fields, FieldsBuilder::class)) {
 					$layout->addFields($fields);
 				}
@@ -91,12 +91,16 @@ class Package extends \Stem\Packages\Package {
 			/** @var LocationBuilder $location */
 			$location = null;
 			foreach($target['pages'] as $page) {
-				$pageTemplate = str_replace(' ', '-', $page).'.php';
-
-				if ($location == null) {
-					$location = $targetBuilder->setLocation('page_template', '==', $pageTemplate);
+				if ($page == 'default') {
+					$targetBuilder->setLocation('post_type', '==', 'page');
 				} else {
-					$location->or('page_template', '==', $pageTemplate);
+					$pageTemplate = str_replace(' ', '-', $page).'.php';
+
+					if ($location == null) {
+						$location = $targetBuilder->setLocation('page_template', '==', $pageTemplate);
+					} else {
+						$location->or('page_template', '==', $pageTemplate);
+					}
 				}
 			}
 

@@ -23,9 +23,7 @@
                 "file": "File",
                 "relative": "Relative URL"
             },
-            "default_value": [
-                "none"
-            ],
+            "default_value": "none",
             "allow_null": 0,
             "multiple": 0,
             "ui": 1,
@@ -333,7 +331,10 @@
                 "id": ""
             },
             "message": "",
-            "default_value": 0
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         },
         {
             "key": "field_58022c9c9ab8f",
@@ -357,7 +358,10 @@
                 "id": ""
             },
             "message": "",
-            "default_value": 0
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         },
         {
             "key": "field_58022b934d88f",
@@ -522,7 +526,12 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": 0,
+    "active": false,
     "description": "Content type definition for links",
-    "modified": 1476638425
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "linkContentType",
+    "map_graphql_types_from_location_rules": 0,
+    "graphql_types": "",
+    "modified": 1647143354
 }
