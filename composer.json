@@ -11,8 +11,14 @@
     }
   ],
   "require": {
-    "stem-press/stem": ">=0.7.2"
+    "stem-press/stem": "dev-dev-upgrade"
   },
+  "repositories":[
+    {
+      "type": "vcs",
+      "url": "git@github.com:PhongGCS/stem.git"
+    }
+  ],
   "require-dev": {},
   "autoload": {
     "psr-4": {
